@@ -1,0 +1,61 @@
+{
+  "name": "react-gameoflife",
+  "version": "1.0.0",
+  "description": "John Conway's Cellular Automaton",
+  "scripts": {    
+    "heroku-postbuild": "webpack -p --config ./webpack.config.js --progress",
+    "start": "node devServer.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/richymel/react-gameoflife.git"
+  },
+  "keywords": [
+    "game",
+    "of",
+    "life",
+    "cellular",
+    "automaton",
+    "automata",
+    "reactjs"
+  ],
+  "author": "RichyMel",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/richymel/react-gameoflife/issues"
+  },
+  "homepage": "https://github.com/richymel/react-gameoflife#readme",
+  "dependencies": {
+    "babel-core": "^6.26.0",
+    "babel-eslint": "^7.2.3",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-react-transform": "^2.0.2",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-plugin-transform-react-display-name": "^6.25.0",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "classnames": "^2.2.5",
+    "css-loader": "^0.28.5",
+    "eslint": "^4.5.0",
+    "eslint-plugin-babel": "^4.1.2",
+    "eslint-plugin-react": "^7.2.1",
+    "express": "^4.15.4",
+    "file-loader": "^0.11.2",
+    "p5": "^0.5.12",
+    "react": "^0.14.9",
+    "react-dom": "^0.14.9",
+    "react-p5-wrapper": "0.0.4",
+    "react-transform-catch-errors": "^1.0.2",
+    "react-transform-hmr": "^1.0.4",
+    "redbox-react": "^1.5.0",
+    "webpack": "^3.5.5"
+  },
+  "devDependencies": {
+    "expect": "^1.20.2",
+    "expect-jsx": "^3.0.0",
+    "webpack-dev-middleware": "^1.12.0",
+    "webpack-hot-middleware": "^2.18.2"
+  }
+}
