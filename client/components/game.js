@@ -31,7 +31,7 @@ class Cell {
     if (previous == 0 && state == 1) p.fill(255,186,118) //baby born
     else if(state == 1) p.fill(255,127,0) //survivor
     else if(previous == 1 && state == 0)  p.fill(26,34,34) //death
-    else p.fill(36,52,52); //none   
+    else p.fill(21,32,32); //none   
 
     p.strokeWeight(.3);
     p.stroke(176);
@@ -78,7 +78,7 @@ class Cell {
     if (paused) return;
     //maxCycles --;
     //if (maxCycles<0) return;
-    p.background(36,52,52);    
+    p.background(21,32,32);    
     generate();
 
     for ( var x = 0; x < rows; x++) {
