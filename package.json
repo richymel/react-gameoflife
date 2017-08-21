@@ -2,7 +2,7 @@
   "name": "react-gameoflife",
   "version": "1.0.0",
   "description": "John Conway's Cellular Automaton",
-  "scripts": {    
+  "scripts": {
     "heroku-postbuild": "webpack -p --config ./webpack.config.js --progress",
     "start": "node devServer.js"
   },
@@ -47,9 +47,12 @@
     "react": "^0.14.9",
     "react-dom": "^0.14.9",
     "react-p5-wrapper": "0.0.4",
+    "react-redux": "^2.1.2",
     "react-transform-catch-errors": "^1.0.2",
     "react-transform-hmr": "^1.0.4",
     "redbox-react": "^1.5.0",
+    "redux": "^2.0.0",
+    "redux-logger": "^2.10.2",
     "webpack": "^3.5.5",
     "webpack-dev-middleware": "^1.12.0",
     "webpack-hot-middleware": "^2.18.2"

@@ -1,3 +1,5 @@
+import { setTally } from '../actions/gameActions'
+
 export default function game (p) {
 
 var started = false;
@@ -6,6 +8,22 @@ var columns;
 var rows;
 var board;
 var cnv;
+var myprops = {};
+var myCounters = {
+  deaths: 0,
+  births: 0,
+  reset : function() {
+    this.births = 0;
+    this.deaths = 0;
+  },
+  incrementBirths: function() {
+    this.births++;
+  },
+  incrementDeaths: function() {
+    this.deaths++;
+  }
+};
+
 //var maxCycles = 5000;
 
 class Cell { 
@@ -28,8 +46,8 @@ class Cell {
 
     //console.log(`display: r:${col} c:${row} rect(${col*w},${row*w},${w-1},${w-1})`);
 
-    if (previous == 0 && state == 1) p.fill(255,186,118) //baby born
-    else if(state == 1) p.fill(255,127,0) //survivor
+    if (previous == 0 && state == 1) p.fill(117,252,252) //baby born
+    else if(state == 1) p.fill(0,190,190) //survivor
     else if(previous == 1 && state == 0)  p.fill(26,34,34) //death
     else p.fill(21,32,32); //none   
 
@@ -62,15 +80,36 @@ class Cell {
   }
  
   p.myCustomRedrawAccordingToNewPropsHandler = function (props) {
+    console.log('this should be called a few times!', props);
+
+    if (Object.keys(myprops).length == 0) {
+      console.log('myprops {}');
+      Object.assign(myprops, props);
+    } else {      
+      if (!chkPropChange(props)) return;
+      console.log('props changed!', myprops);
+      Object.assign(myprops, props);
+      setTally(myCounters.births, myCounters.deaths);
+    }
+    
     started = (!started) ? props.started : true;  
     paused = props.paused;  
     p.frameRate( props.frameRate );
     if (props.cleared) {      
-      clearBoard();
+      clearBoard();      
+      setTally(myCounters.births, myCounters.deaths);
     }
+    
     if (props.started) {
       init();
+    }        
+  }
+
+  function chkPropChange(props) {
+    for (var i in myprops) {      
+      if (myprops[i] !== props[i]) return true;
     }
+    return false;
   }
 
   p.draw = function () {   
@@ -88,7 +127,8 @@ class Cell {
     }
 
     setPreviousState();
-
+    //update counters:
+    setTally(myCounters.births, myCounters.deaths);
   }
 
   function clearBoard() {
@@ -97,6 +137,8 @@ class Cell {
 
   function init(clear=false) {       
     //maxCycles=5000;
+    myCounters.reset();
+
     for (var i = 0; i < rows; i++) {
       for (var j = 0; j < columns; j++) {
         // Lining the edges with 0s
@@ -104,6 +146,9 @@ class Cell {
         // Filling the rest randomly
         else if (!clear) board[i][j].initialState( getRandomInt(0,2) );
         else   board[i][j].initialState( 0 );
+
+        if (board[i][j] === 1) myCounters.incrementBirths();
+
       }
     }
     //console.log('init: board pattern state:',flatten(board));
@@ -125,9 +170,18 @@ class Cell {
           }
         }
         
-        if      ((board[x][y].state == 1) && (neighbors < 2)) board[x][y].newstate(0); //isolation
-        else if ((board[x][y].state == 1) && (neighbors > 3)) board[x][y].newstate(0); //overpopulation
-        else if ((board[x][y].state == 0) && (neighbors == 3)) board[x][y].newstate(1); //baby born
+        if ((board[x][y].state == 1) && (neighbors < 2)) {
+          board[x][y].newstate(0); //isolation
+          myCounters.incrementDeaths();
+        }
+        else if ((board[x][y].state == 1) && (neighbors > 3)) {
+          board[x][y].newstate(0); //overpopulation
+          myCounters.incrementDeaths(1);
+        } 
+        else if ((board[x][y].state == 0) && (neighbors == 3)) {
+          board[x][y].newstate(1); //baby born
+          myCounters.incrementBirths(1);
+        }
 /*
         if (maxCycles==1) {
           //console.log('generated:', neighbors,`(${x},${y}) -> prev/state:`,board[x][y].previous,board[x][y].state );
