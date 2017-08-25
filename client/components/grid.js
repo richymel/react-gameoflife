@@ -182,9 +182,9 @@ class Grid extends React.Component {
           <GameBtn drawingBtn active={pattern=='CELL_EATER' && !draw} onClick={this.draw} onClick={this.eater}>CELL EATER</GameBtn>
           <GameBtn drawingBtn active={pattern=='TAPESTRY' && !draw} onClick={this.draw} onClick={this.tapestry}>TAPESTRY</GameBtn>
           <GameBtn drawingBtn active={pattern=='PENTOMINO' && !draw} onClick={this.draw} onClick={this.pentomino}>PENTOMINO</GameBtn>
-          <GameBtn disable={draw} active={fps==speed.slow} onClick={this.draw} onClick={() => { this.fps(speed.slow) }}>Slow ({speed.slow} fps)</GameBtn>
-          <GameBtn disable={draw} active={fps==speed.medium} onClick={this.draw} onClick={() => { this.fps(speed.medium) }}>Med ({speed.medium} fps)</GameBtn>
-          <GameBtn disable={draw} active={fps==speed.fast} onClick={this.draw} onClick={() => { this.fps(speed.fast) }}>Fast ({speed.fast} fps)</GameBtn>
+          <GameBtn disable={draw} active={fps==speed.slow} onClick={this.draw} onClick={() => { this.fps(speed.slow) }}>({speed.slow} fps)</GameBtn>
+          <GameBtn disable={draw} active={fps==speed.medium} onClick={this.draw} onClick={() => { this.fps(speed.medium) }}>({speed.medium} fps)</GameBtn>
+          <GameBtn disable={draw} active={fps==speed.fast} onClick={this.draw} onClick={() => { this.fps(speed.fast) }}>({speed.fast} fps)</GameBtn>
           <GameBtn disable={draw} active={big} onClick={this.big}>{(big) ? 'SMALL' : 'BIG'}</GameBtn>  
 
           <Stats />
