@@ -21,7 +21,7 @@ class Stats extends React.Component {
   render() {  
     return (      
         <span style={linkStyle}>  
-          DATUM: {this.props.gameTally.births} / {this.props.gameTally.deaths}
+          Generations: {this.props.gameTally.generations}
         </span>
     )
   }

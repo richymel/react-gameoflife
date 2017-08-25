@@ -16,12 +16,12 @@ const buttonCmds = {
 	start: false,
 	pause: false,
 	clear: false,
+	pattern: undefined,
 	fps: 10
 }
 
 const gameTally = {
-	deaths: 0,
-	births: 0
+	generations: 0
 }
 
 //create an obj for the default data

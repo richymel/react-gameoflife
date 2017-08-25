@@ -19,7 +19,8 @@ module.exports = {
         }
       }),
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin()
+    new webpack.NoEmitOnErrorsPlugin()
+    //,     new ExtractTextPlugin(./dist/style.css)
   ],
   module: {
     loaders: [
@@ -32,9 +33,9 @@ module.exports = {
     },
     // CSS
     { 
-      test: /\.styl$/, 
+      test: /\.styl$|\.css$/, 
       include: path.join(__dirname, 'client'),
-      loader: 'style-loader!css-loader!stylus-loader'
+      loader: 'style-loader!css-loader?modules!stylus-loader'
     },
     //Typography
     { 

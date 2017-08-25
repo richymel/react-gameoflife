@@ -4,11 +4,17 @@ import store from '../store';
 
 module.exports = {
   startGame: function(bool) {
-    console.log('gameActions-start');
   	store.dispatch({   	
      	type: 'START_GAME',
       payload: bool
     })	
+  },
+
+  bigBoard: function(bool) {
+    store.dispatch({
+      type: 'BIG_BOARD',
+      payload: bool
+    })
   },
 
   pauseGame: function(bool) {
@@ -16,6 +22,13 @@ module.exports = {
   		type: 'PAUSE_GAME',
   		payload: bool
   	})
+  },
+
+  draw: function(bool) {
+    store.dispatch({
+      type: 'DRAW',
+      payload: bool
+    })
   },
 
   clearBoard: function(bool) {
@@ -32,10 +45,17 @@ module.exports = {
   	})
   },
 
-  setTally: function(births, deaths) {
+  pattern: function(pattern) {
     store.dispatch({
-      type: 'SET_COUNTERS',
-      payload: { births, deaths }
+      type: 'BUILT-IN_PATTERN',
+      payload: pattern
+    })
+  },
+
+  setTally: function(generations) {
+    store.dispatch({
+      type: 'SET_COUNTER',
+      payload: generations
     })
   }
 }

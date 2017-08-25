@@ -1,20 +1,16 @@
 function gameTally(state = [], action) {
 	switch(action.type) {
-		case 'INCREMENT_DEATHS' :			
+		/*
+		case 'INCREMENT_GEN' :
 			return {
 				...state, 
-				deaths: state.deaths + action.payload
+				generations: state.generations + action.payload
 			}
-		case 'INCREMENT_BIRTHS' :
+		*/
+		case 'SET_COUNTER' :
 			return {
 				...state, 
-				births: state.births + action.payload
-			}
-		case 'SET_COUNTERS' :			
-			return {
-				...state, 
-				deaths: action.payload.deaths,
-				births: action.payload.births
+				generations: action.payload
 			}			
 		default:
 			return state
