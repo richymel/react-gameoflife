@@ -31,15 +31,17 @@ const GameBtn = styled.button`
     display: inline;
     box-sizing: border-box;
     margin: 0 auto;
+    margin-bottom: 17px;
+    margin-right: 7px;
     padding: 3px;
     width: 80%;
     max-width: 90px;
-    max-height: 25px;
+    height: 40px;
     border-radius: 8px;
     text-align: center;
     text-decoration: none;
     letter-spacing: 1px;
-    transition: all 0.3s ease-out;    
+    transition: all 0.3s ease-out;
     &:hover {
         background: ${props => (!props.active) ? 'rgb(176, 176, 176)' : ''};
         color: ${props =>  (!props.active) ? 'rgb(26,34,34)' : ''};
@@ -47,8 +49,35 @@ const GameBtn = styled.button`
     }    
     pointer-events: ${props => (props.disable && !props.drawingBtn) ? 'none' : ''};
     border: ${props => (props.disable && !props.drawingBtn) ? '2px solid rgb(76,176,176)'  : '2px solid rgb(117,252,252)'};
-    background: ${props => (props.disable && !props.drawingBtn) ? 'rgba(26,34,34, 0.5)' : (props.active) ? '#fff' : 'rgba(0,190,190, 0.5)'};
+    background: ${props => (props.disable && !props.drawingBtn) ? 'rgba(26,34,34, 0.2)' : (props.active) ? '#fff' : 'rgba(0,190,190, 0.2)'};
     color: ${props => (props.disable && !props.drawingBtn) ? 'rgb(76, 176, 176)' : (props.active) ? '#000' : '#fff'};
+    -webkit-box-shadow: 8px 8px 5px 2px rgba(7,14,14,0.67);
+    -moz-box-shadow: 8px 8px 5px 2px rgba(7,14,14,0.67);
+    box-shadow: 8px 8px 5px 2px rgba(7,14,14,0.67);  
+`
+
+const Left = styled.div`
+    margin-left: 50px;
+    margin-top: 20px;
+    float: left;
+    width: 600px;
+    height: 400px;
+    border: 5px solid rgb(39, 138, 138);
+    margin-right: 20px;
+    -webkit-box-shadow: 8px 8px 5px 5px rgba(7,14,14,0.67);
+    -moz-box-shadow: 8px 8px 5px 5px rgba(7,14,14,0.67);
+    box-shadow: 8px 8px 5px 5px rgba(7,14,14,0.67);
+`
+const Right = styled.div`
+  float: Left;
+  line-height: 40px;
+  margin-top: 18px;
+  margin-left: 50px;
+  width: 250px;
+  @media (max-width:990px) and (min-width:700px) {    
+    width: 650px;
+    margin-left: 70px;    
+  }  
 `
 
 @connect((store) => {
@@ -92,7 +121,6 @@ class Grid extends React.Component {
     gameActions.clearBoard(false)
     gameActions.pattern({pattern: undefined, requestId: this.guid() })
     gameActions.pauseGame(false)
-    //gameActions.bigBoard(false)
   }
 
   big() {  
@@ -104,7 +132,6 @@ class Grid extends React.Component {
     gameActions.clearBoard(false)
     gameActions.startGame(false)
     gameActions.pauseGame(!this.props.buttonCmds.pause)
-    //gameActions.bigBoard(false)
   }
 
   draw() {    
@@ -114,7 +141,6 @@ class Grid extends React.Component {
 
     gameActions.pattern({pattern: undefined, requestId: this.guid() })
     gameActions.draw(!this.props.buttonCmds.draw)
-    //gameActions.bigBoard(false)
   }
 
   clear() {
@@ -122,49 +148,44 @@ class Grid extends React.Component {
     gameActions.pattern({pattern: undefined, requestId: this.guid() })
     gameActions.pauseGame(false)
     gameActions.startGame(false)
-    //gameActions.bigBoard(false)
   }
 
   fps(frameRate) { 
     gameActions.clearBoard(false)
     gameActions.fps(frameRate)
-    gameActions.startGame(false)
-    //gameActions.bigBoard(false)
+    //gameActions.startGame(false)
   }
 
   glider() {
     gameActions.startGame(true)
     gameActions.clearBoard(true)
     gameActions.pattern({pattern: 'GLIDER_FACTORY', requestId: this.guid() })
-    //gameActions.bigBoard(false)
   }
 
   eater() {
     gameActions.startGame(true)
     gameActions.clearBoard(true)
     gameActions.pattern({pattern: 'CELL_EATER', requestId: this.guid() })
-    //gameActions.bigBoard(false)
   }
 
   tapestry() {    
     gameActions.startGame(true)
     gameActions.clearBoard(true)
     gameActions.pattern({pattern: 'TAPESTRY', requestId: this.guid() })
-    //gameActions.bigBoard(false)
   }
 
   pentomino() {    
     gameActions.startGame(true)
     gameActions.clearBoard(true)
     gameActions.pattern({pattern: 'PENTOMINO', requestId: this.guid() })
-    //gameActions.bigBoard(false)
   }
 
   render() {
     const { start, pause, clear, draw, big, fps, pattern, requestId }  = this.props.buttonCmds
     return (      
         <div>
-          <P5Wrapper sketch={game} 
+          <Left>
+            <P5Wrapper sketch={game} 
               started={start}
               paused={pause}
               cleared={clear}
@@ -174,20 +195,22 @@ class Grid extends React.Component {
               draw={draw}
               big={big}
               />
-          <GameBtn disable={draw} active={start && !pattern} onClick={this.start}>START</GameBtn>
-          <GameBtn disable={draw} active={pause} onClick={this.pause}>{(pause) ? 'CONTINUE' : 'PAUSE' }</GameBtn>
-          <GameBtn drawingBtn active={clear && !draw && !pattern && !big} onClick={this.clear}>CLEAR</GameBtn>
-          <GameBtn drawingBtn active={draw} onClick={this.draw}>{(draw) ? 'ACTION!' : 'DRAW' }</GameBtn>
-          <GameBtn drawingBtn active={pattern=='GLIDER_FACTORY' && !draw} onClick={this.glider}>GLIDER GUN</GameBtn>
-          <GameBtn drawingBtn active={pattern=='CELL_EATER' && !draw} onClick={this.draw} onClick={this.eater}>CELL EATER</GameBtn>
-          <GameBtn drawingBtn active={pattern=='TAPESTRY' && !draw} onClick={this.draw} onClick={this.tapestry}>TAPESTRY</GameBtn>
-          <GameBtn drawingBtn active={pattern=='PENTOMINO' && !draw} onClick={this.draw} onClick={this.pentomino}>PENTOMINO</GameBtn>
-          <GameBtn disable={draw} active={fps==speed.slow} onClick={this.draw} onClick={() => { this.fps(speed.slow) }}>({speed.slow} fps)</GameBtn>
-          <GameBtn disable={draw} active={fps==speed.medium} onClick={this.draw} onClick={() => { this.fps(speed.medium) }}>({speed.medium} fps)</GameBtn>
-          <GameBtn disable={draw} active={fps==speed.fast} onClick={this.draw} onClick={() => { this.fps(speed.fast) }}>({speed.fast} fps)</GameBtn>
-          <GameBtn disable={draw} active={big} onClick={this.big}>{(big) ? 'SMALL' : 'BIG'}</GameBtn>  
-
-          <Stats />
+          </Left>
+          <Right>
+            <GameBtn disable={draw} active={start && !pattern} onClick={this.start}>START</GameBtn>
+            <GameBtn disable={draw} active={pause} onClick={this.pause}>{(pause) ? 'CONTINUE' : 'PAUSE' }</GameBtn>
+            <GameBtn drawingBtn active={clear && !draw && !pattern && !big} onClick={this.clear}>CLEAR</GameBtn>
+            <GameBtn drawingBtn active={draw} onClick={this.draw}>{(draw) ? 'ACTION!' : 'DRAW' }</GameBtn>
+            <GameBtn drawingBtn active={pattern=='GLIDER_FACTORY' && !draw} onClick={this.glider}>GLIDER GUN</GameBtn>
+            <GameBtn drawingBtn active={pattern=='CELL_EATER' && !draw} onClick={this.draw} onClick={this.eater}>CELL EATER</GameBtn>
+            <GameBtn drawingBtn active={pattern=='TAPESTRY' && !draw} onClick={this.draw} onClick={this.tapestry}>TAPESTRY</GameBtn>
+            <GameBtn drawingBtn active={pattern=='PENTOMINO' && !draw} onClick={this.draw} onClick={this.pentomino}>PENTOMINO</GameBtn>
+            <GameBtn disable={draw} active={fps==speed.slow} onClick={this.draw} onClick={() => { this.fps(speed.slow) }}>SLOW</GameBtn>
+            <GameBtn disable={draw} active={fps==speed.medium} onClick={this.draw} onClick={() => { this.fps(speed.medium) }}>MEDIUM</GameBtn>
+            <GameBtn disable={draw} active={fps==speed.fast} onClick={this.draw} onClick={() => { this.fps(speed.fast) }}>FAST</GameBtn>
+            <GameBtn disable={draw} active={big} onClick={this.big}>{(big) ? 'BIG CELLS' : 'TINY CELLS'}</GameBtn>
+            <Stats />
+          </Right>        
         </div>
     )
   }

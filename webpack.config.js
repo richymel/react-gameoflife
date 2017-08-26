@@ -24,24 +24,29 @@ module.exports = {
   ],
   module: {
     loaders: [
-    // js
-    {
-      test: /\.jsx?$/,
-      exclude: /node_modules/,
-      loaders: ['babel-loader'],
-      include: path.join(__dirname, 'client')
-    },
-    // CSS
-    { 
-      test: /\.styl$|\.css$/, 
-      include: path.join(__dirname, 'client'),
-      loader: 'style-loader!css-loader?modules!stylus-loader'
-    },
-    //Typography
-    { 
-      test: /\.(png|woff|woff2|eot|ttf|svg)$/, 
-      loader: 'url-loader?limit=100000' 
-    }
+      // js
+      {
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        loaders: ['babel-loader'],
+        include: path.join(__dirname, 'client')
+      },
+      // CSS
+      { 
+        test: /\.styl$|\.css$/, 
+        include: path.join(__dirname, 'client'),
+        loader: 'style-loader!css-loader?modules!stylus-loader'
+      },
+      //Typography NB: Using file-loader instead of url-loader
+      {
+        test: /\.(eot|svg|ttf|woff|woff2|otf)$/,
+        loader: 'file-loader'
+      },
+      //Images
+      { 
+        test: /\.(png|jpg)$/, 
+        loader: 'url-loader?limit=100000' 
+      }
     ]
   }
 };

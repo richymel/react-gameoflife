@@ -66,11 +66,19 @@ const Patterns = {
     rows: 40    
   },
   USER_DRAWN: {
-    data: undefined,
-    cols: 0,
-    rows: 0
+    data: {
+      big: undefined,
+      small: undefined
+    },
+    cols: {
+      big: 0,
+      small: 0
+    },
+    rows: {
+      big: 0,
+      small: 0
+    }
   }
-
 }
 
 const colors = {}
@@ -117,9 +125,7 @@ class Cell {
 
   display(preferredColor=null) {
     const { _y, _x, w, state, previous } = this
-
-    //console.log(`display: r:${_y} c:${_x} rect(${_y*w},${_x*w},${w-1},${w-1})`);
-    
+  
     if (preferredColor !== null) {
       p.fill(preferredColor); 
     } else {
@@ -164,50 +170,67 @@ class Cell {
       for (var c = 0; c<columns; c++) {
         board[r][c] = new Cell(r,c,w)
       }
-    }    
+    }
+
+    if (w===10) {
+      if (Patterns.USER_DRAWN.data.small === undefined) {
+        Patterns.USER_DRAWN.data.small = new Array(columns * rows);
+        Patterns.USER_DRAWN.data.small = Patterns.USER_DRAWN.data.small.fill(0).join('');
+        Patterns.USER_DRAWN.rows.small = rows;
+        Patterns.USER_DRAWN.cols.small = columns;        
+      }
+    } else {
+      if (Patterns.USER_DRAWN.data.big === undefined) {
+        Patterns.USER_DRAWN.data.big = new Array(columns * rows);
+        Patterns.USER_DRAWN.data.big = Patterns.USER_DRAWN.data.big.fill(0).join('');
+        Patterns.USER_DRAWN.rows.big = rows;
+        Patterns.USER_DRAWN.cols.big = columns;
+      }
+    }
+
   }
 
   p.myCustomRedrawAccordingToNewPropsHandler = function (props) {    
 
+    var speedChange = false;
     userPattern = false;
 
     if (Object.keys(myprops).length == 0) {
-      console.log('myprops {}');
       Object.assign(myprops, props);
     } else {      
       if (!chkPropChange(props)) return;
-      console.log(`props changed! from ${JSON.stringify(myprops)} to ${JSON.stringify(props)}`);
+      //console.log(`props changed! from ${JSON.stringify(myprops)} to ${JSON.stringify(props)}`);
 
-      //Action! after draw : 
+      //Monitor Speed Change
+      if (props.frameRate !== myprops.frameRate) {
+        speedChange = true;
+      } else {
+        speedChange = false;
+      }
+
+      //Action! after draw : (equivalent to START with user pattern) 
       if (!props.draw && myprops.draw) {
-        console.log('looks like ACTION! to me...', started);
         userPattern = true;
-        saveUserPattern();
+        saveUserPattern(props);
         started = true;
       }
 
       //Small after Big  or Big after Small:
       if (!props.big && myprops.big || props.big && !myprops.big) {
-        console.log('looks like BOARD SIZE chg to me...');
         board = undefined;
         createBoard( (props.big) ? 5 : 10);
         displayBoard();
         init();
 
         //Adjust user pattern to new board dimensions
-        //TODO: Convert coord system here!
         if (Patterns.USER_DRAWN.data) { 
-          Patterns.USER_DRAWN.cols = columns;
-          Patterns.USER_DRAWN.rows = rows;
           if (!props.pattern) { //If not playing with a pattern
-            initPattern('USER_DRAWN');
             userPattern = true; //enable by default and show the user pattern on size change
+            initPattern(props,'USER_DRAWN');            
             started = true;
           }
         }
       }
-
-      //Object.assign(myprops, props);
     }
 
     started = (!started) ? props.started : true;  
@@ -215,20 +238,24 @@ class Cell {
     drawMode = props.draw;    
 
     p.frameRate( props.frameRate );
+
     if (props.cleared) {      
       clearBoard();      
       setTally(myCounters.generations);//update gen count on screen
     }
     
     if (props.started) {
-      if (props.pattern !== undefined) {
-        initPattern(props.pattern);
+      if (props.pattern !== undefined && !speedChange) {
+        initPattern(props);
       } else {
-        if (!props.draw && !userPattern) init();
+        if (!props.draw && !userPattern && !speedChange) {
+          init();
+        }
       }
     }
 
     if (props.draw) {
+      userPattern =  true;
       loadUserPattern(props);
     }
 
@@ -246,7 +273,7 @@ class Cell {
 
   function loadUserPattern(props) {
     if (Patterns.USER_DRAWN.data !== undefined  && !props.pattern) {
-      initPattern('USER_DRAWN');
+      initPattern(props,'USER_DRAWN');
     }
     displayBoard();
   }
@@ -294,19 +321,27 @@ class Cell {
 
   function displayBoard() {
     for ( var r = 0; r < rows; r++) {
-      for ( var c = 0; c < columns; c++) {      
-        board[r][c].display();
+      for ( var c = 0; c < columns; c++) {
+        board[r][c].display(userPattern?board[r][c].state==1?colors.userpaint:null:null);
       }
     }
   }
 
-  function saveUserPattern() {
-    //serialize pattern into object    
-    Patterns.USER_DRAWN.data = board.reduce((a, b) => 
-                                a.concat(b)).map((el) => el.state).join('').replace(/,/g, '');
+  function saveUserPattern(props) {
+    //serialize pattern into object
+    if (props.big) {
+      Patterns.USER_DRAWN.data.big = board.reduce((a, b) => 
+                                    a.concat(b)).map((el) => el.state).join('').replace(/,/g, '');
 
-    Patterns.USER_DRAWN.cols = columns;
-    Patterns.USER_DRAWN.rows = rows;
+      Patterns.USER_DRAWN.cols.big = columns;
+      Patterns.USER_DRAWN.rows.big = rows;
+    } else {
+      Patterns.USER_DRAWN.data.small = board.reduce((a, b) => 
+                                  a.concat(b)).map((el) => el.state).join('').replace(/,/g, '');
+
+      Patterns.USER_DRAWN.cols.small = columns;
+      Patterns.USER_DRAWN.rows.small = rows;
+    }
   }  
 
   function clearBoard() {
@@ -328,15 +363,29 @@ class Cell {
     }
   }
 
-  function initPattern(pattern) {
-    myCounters.reset();    
-    const { rows, cols, data } = Patterns[pattern];
+  function initPattern(props, user_Pattern='') {
+    myCounters.reset();
+    
+    const { rows, cols, data } = Patterns[(user_Pattern=='') ? props.pattern : user_Pattern ];
 
-    var dataArray = data.split('');
+    var dataArray = null;
+    var _rows = 0;
+    var _cols = 0;
+
+    if (Object.keys(data).find((el) => el==='big'||el==='small')) {
+      dataArray = (props.big) ? data.big.split('') : data.small.split('');
+      _rows = (props.big) ? rows.big : rows.small;
+      _cols = (props.big) ? cols.big : cols.small;      
+    } else {
+      dataArray = data.split('');
+      _rows = rows;
+      _cols = cols;
+    }
+     
     var idx = 0;
 
-    for (var i=0 ; i<rows; i++) {
-      for (var j=0; j<cols; j++) {
+    for (var i=0 ; i<_rows; i++) {
+      for (var j=0; j<_cols; j++) {
         board[i][j].initialState( (dataArray[idx]==1)?1:0 );
         //NB. Never, ever assign dataArray[idx] to board[i][j], notice the 
         //    necessity to hard code either 1 or 0. If you do... unexpected results do occur in the board!!

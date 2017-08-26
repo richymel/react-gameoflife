@@ -43,9 +43,6 @@ const enhancers = compose(
 
 const store = createStore(rootReducer, defaulState, enhancers);
 
-console.log('store created:', store);
-
-
 //hot reloading reducers 
 if (module.hot) {
 		module.hot.accept('./reducers/', () => {
