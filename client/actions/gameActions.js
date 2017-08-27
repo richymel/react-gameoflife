@@ -3,52 +3,52 @@ import store from '../store';
 //sync actions
 
 module.exports = {
-  startGame: function(bool) {
+  startGame: function(parms) {
   	store.dispatch({   	
      	type: 'START_GAME',
-      payload: bool
+      payload: parms
     })	
   },
 
-  bigBoard: function(bool) {
+  bigBoard: function(parms) {
     store.dispatch({
       type: 'BIG_BOARD',
-      payload: bool
+      payload: parms
     })
   },
 
-  pauseGame: function(bool) {
+  pauseGame: function(parms) {
   	store.dispatch({
   		type: 'PAUSE_GAME',
-  		payload: bool
+  		payload: parms
   	})
   },
 
-  draw: function(bool) {
+  draw: function(parms) {
     store.dispatch({
       type: 'DRAW',
-      payload: bool
+      payload: parms
     })
   },
 
-  clearBoard: function(bool) {
+  clearBoard: function(parms) {
     store.dispatch({
       type: 'CLEAR_BOARD',
-      payload: bool
+      payload: parms
     })
   },
 
-  fps: function(speed) {
+  fps: function(parms) {
   	store.dispatch({
   		type: 'CHANGE_SPEED',
-  		payload: speed
+  		payload: parms
   	})
   },
 
-  pattern: function(pattern) {
+  pattern: function(parms) {
     store.dispatch({
       type: 'BUILT-IN_PATTERN',
-      payload: pattern
+      payload: parms
     })
   },
 

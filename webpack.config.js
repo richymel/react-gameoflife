@@ -20,7 +20,17 @@ module.exports = {
       }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin()
-    //,     new ExtractTextPlugin(./dist/style.css)
+/*
+    ,
+    new webpack.optimize.UglifyJsPlugin({
+      compress: process.env.NODE_ENV === 'production'
+    }),
+    new webpack.optimize.UglifyJsPlugin({
+      compressor: {
+        warnings: false
+      }
+    })    
+*/    
   ],
   module: {
     loaders: [

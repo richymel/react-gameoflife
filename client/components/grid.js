@@ -7,11 +7,6 @@ import gameActions from '../actions/gameActions'
 import Stats from './stats'
 import styled from 'styled-components'
  
-const linkStyle = {
-  cursor: 'pointer',
-  color: 'white'
-}
-
 const speed = { //fps
   slow: 10,
   medium: 20,
@@ -46,14 +41,18 @@ const GameBtn = styled.button`
         background: ${props => (!props.active) ? 'rgb(176, 176, 176)' : ''};
         color: ${props =>  (!props.active) ? 'rgb(26,34,34)' : ''};
         transition: ${props => (!props.active) ? 'all 0.5s ease-in' : ''};
-    }    
+    }
     pointer-events: ${props => (props.disable && !props.drawingBtn) ? 'none' : ''};
     border: ${props => (props.disable && !props.drawingBtn) ? '2px solid rgb(76,176,176)'  : '2px solid rgb(117,252,252)'};
     background: ${props => (props.disable && !props.drawingBtn) ? 'rgba(26,34,34, 0.2)' : (props.active) ? '#fff' : 'rgba(0,190,190, 0.2)'};
     color: ${props => (props.disable && !props.drawingBtn) ? 'rgb(76, 176, 176)' : (props.active) ? '#000' : '#fff'};
     -webkit-box-shadow: 8px 8px 5px 2px rgba(7,14,14,0.67);
     -moz-box-shadow: 8px 8px 5px 2px rgba(7,14,14,0.67);
-    box-shadow: 8px 8px 5px 2px rgba(7,14,14,0.67);  
+    box-shadow: 8px 8px 5px 2px rgba(7,14,14,0.67);
+    :active {
+      background: #fff;
+      transition: all 0.1s ease-in-out;
+    }
 `
 
 const Left = styled.div`
@@ -99,11 +98,6 @@ class Grid extends React.Component {
     this.pentomino = this.pentomino.bind(this)
     this.start = this.start.bind(this)
     this.clear = this.clear.bind(this)
-
-/*
-
-    this.fps = this.fps.bind(this)
-*/    
   }
 
   s4() {
@@ -112,72 +106,67 @@ class Grid extends React.Component {
       .substring(1);
   }
 
+  //A unique ID is neccesary since to force a state change:
   guid() {
     return (this.s4()+this.s4()+this.s4()).substring(0,11);
   }
 
   start() {
-    gameActions.startGame(true)
-    gameActions.clearBoard(false)
-    gameActions.pattern({pattern: undefined, requestId: this.guid() })
-    gameActions.pauseGame(false)
+   gameActions.startGame(
+      { start:true, clear:false, 
+        pattern:undefined, requestId:this.guid(), pause:false})
   }
 
   big() {  
-    gameActions.clearBoard(true);
-    gameActions.bigBoard(!this.props.buttonCmds.big)
+    gameActions.bigBoard({start:true, clear:true, big:!this.props.buttonCmds.big})
   }  
 
   pause() {
-    gameActions.clearBoard(false)
-    gameActions.startGame(false)
-    gameActions.pauseGame(!this.props.buttonCmds.pause)
+    gameActions.pauseGame({clear:false, start:false, pause:!this.props.buttonCmds.pause})
   }
 
-  draw() {    
-    if (!this.props.buttonCmds.draw) {
-      gameActions.clearBoard(true)
-    } else gameActions.clearBoard(false)
+  draw() {
+    var { draw } = this.props.buttonCmds
 
-    gameActions.pattern({pattern: undefined, requestId: this.guid() })
-    gameActions.draw(!this.props.buttonCmds.draw)
+    if (!this.props.buttonCmds.draw) {
+      gameActions.draw({clear:true, pattern:undefined, requestId:this.guid(), draw:!draw})
+    } else {
+        gameActions.draw({clear:false, pattern:undefined, requestId:this.guid(), draw:!draw})
+    }
   }
 
   clear() {
-    gameActions.clearBoard(true)
-    gameActions.pattern({pattern: undefined, requestId: this.guid() })
-    gameActions.pauseGame(false)
-    gameActions.startGame(false)
+   gameActions.clearBoard(
+      { clear:true, pattern:undefined, 
+        requestId:this.guid(), pause:false, start:false})
   }
 
-  fps(frameRate) { 
-    gameActions.clearBoard(false)
-    gameActions.fps(frameRate)
-    //gameActions.startGame(false)
+  fps(frameRate) {
+    gameActions.fps({fps:frameRate, clear:false, start:false})
   }
 
   glider() {
-    gameActions.startGame(true)
-    gameActions.clearBoard(true)
-    gameActions.pattern({pattern: 'GLIDER_FACTORY', requestId: this.guid() })
+    gameActions.pattern(
+        { start:true, clear:true, 
+          pattern:'GLIDER_FACTORY', requestId:this.guid() })
   }
 
   eater() {
-    gameActions.startGame(true)
-    gameActions.clearBoard(true)
-    gameActions.pattern({pattern: 'CELL_EATER', requestId: this.guid() })
+    gameActions.pattern(
+            { start:true, clear:true, 
+              pattern:'CELL_EATER', requestId:this.guid() })    
   }
 
-  tapestry() {    
-    gameActions.startGame(true)
-    gameActions.clearBoard(true)
-    gameActions.pattern({pattern: 'TAPESTRY', requestId: this.guid() })
+  tapestry() {
+    gameActions.pattern(
+            { start:true, clear:true, 
+              pattern:'TAPESTRY', requestId:this.guid() })   
   }
 
-  pentomino() {    
-    gameActions.startGame(true)
-    gameActions.clearBoard(true)
-    gameActions.pattern({pattern: 'PENTOMINO', requestId: this.guid() })
+  pentomino() {
+    gameActions.pattern(
+            { start:true, clear:true, 
+              pattern:'PENTOMINO', requestId:this.guid() })   
   }
 
   render() {
@@ -197,9 +186,9 @@ class Grid extends React.Component {
               />
           </Left>
           <Right>
-            <GameBtn disable={draw} active={start && !pattern} onClick={this.start}>START</GameBtn>
+            <GameBtn disable={draw} onClick={this.start}>START</GameBtn>
             <GameBtn disable={draw} active={pause} onClick={this.pause}>{(pause) ? 'CONTINUE' : 'PAUSE' }</GameBtn>
-            <GameBtn drawingBtn active={clear && !draw && !pattern && !big} onClick={this.clear}>CLEAR</GameBtn>
+            <GameBtn drawingBtn onClick={this.clear}>CLEAR</GameBtn>
             <GameBtn drawingBtn active={draw} onClick={this.draw}>{(draw) ? 'ACTION!' : 'DRAW' }</GameBtn>
             <GameBtn drawingBtn active={pattern=='GLIDER_FACTORY' && !draw} onClick={this.glider}>GLIDER GUN</GameBtn>
             <GameBtn drawingBtn active={pattern=='CELL_EATER' && !draw} onClick={this.draw} onClick={this.eater}>CELL EATER</GameBtn>

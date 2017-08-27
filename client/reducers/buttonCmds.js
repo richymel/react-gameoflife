@@ -6,42 +6,69 @@
 //  and just return state if no action is handled
 
 function gameCommand(state=[], action) {
+	
 	switch(action.type) {
 		case 'START_GAME' :
+      var {start,clear,pattern,requestId,pause} = action.payload
 			return {
 				...state,
-				start: action.payload
-			}	
+        start,
+        clear,				
+        pattern,
+        requestId,
+        pause
+			}
 		case 'BIG_BOARD' :
-			return {
+			var { start, clear, big } = action.payload
+			return {				
 				...state,
-				big: action.payload
+				big,
+				clear,
+				start		
 			}
 		case 'PAUSE_GAME' :
+			var {clear,start,pause} = action.payload
 			return {
 				...state,
-				pause: action.payload
+				pause,
+				clear,
+				start				
 			}
 		case 'DRAW' :
+			var {clear,pattern,requestId,draw} = action.payload
 			return {
 				...state,
-				draw: action.payload
+				draw,
+				clear,
+				pattern,
+				requestId				
 			}
 		case 'CLEAR_BOARD' :
+			var {clear, pattern, requestId, pause, start} = action.payload
 			return {
-				...state,
-				clear: action.payload
+				...state,				
+				clear,
+				pattern,
+				requestId,
+				pause,
+				start
 			}			
-		case 'CHANGE_SPEED' :			
+		case 'CHANGE_SPEED' :
+			var {fps, clear, start} = action.payload
 			return {
 				...state,
-				fps: action.payload
+				fps,
+				clear,
+				start
 			}
 		case 'BUILT-IN_PATTERN' :
+			var {start,clear,pattern,requestId} = action.payload
 			return {
 				...state,
-				pattern: action.payload.pattern,
-				requestId: action.payload.requestId
+				pattern,
+				start,
+				clear,				
+				requestId,
 			}
 
 		default:

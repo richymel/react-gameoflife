@@ -4,11 +4,11 @@
   "description": "John Conway's Cellular Automaton",
   "scripts": {
     "heroku-postbuild": "webpack -p --config ./webpack.config.js --progress",
-    "start": "node devServer.js"
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/richymel/react-gameoflife.git"
+    "url": "https://github.com/richymel/react-gameoflife.git"
   },
   "keywords": [
     "game",
