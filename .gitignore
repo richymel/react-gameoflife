@@ -9,9 +9,11 @@ yarn-error.log*
 *.env
 *.dev
 .DS_Store
+compile.bat
 
 # Dependency directories
 node_modules/
+dist/
 
 # Optional npm cache directory
 .npm
