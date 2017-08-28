@@ -1,13 +1,11 @@
 
 ## react-gameoflife
 John Conway's Cellular Automaton aka. Game of Life
-##### CodePen Project written by  : RichyMel / 2017.08.27
-##### A FreeCodeCamp ![FreeCodeCamp](https://cdnjs.cloudflare.com/ajax/libs/simple-icons/3.0.1/freecodecamp.svg =40x1) #305 challenge
+#### FreeCodeCamp <img src="https://cdnjs.cloudflare.com/ajax/libs/simple-icons/3.0.1/freecodecamp.svg" width="20" height="20"> 305 Challenge 
+###### by  : RichyMel. Written in 2017.08.15 - 27
 ***
-
 ### Play with the react-gameoflife: [here](https://react-gameoflife.herokuapp.com/)
 ***
-
 ### Assets and 3rd party components:
 
 - [Styled Components](https://github.com/styled-components)  by: @glenmaddern, @mxstbr, @_philpl‬ [website](https://www.styled-components.com/)
@@ -43,7 +41,7 @@ John Conway's Cellular Automaton aka. Game of Life
 ***
 ### Final notes:
 >- It was challenging building the **object-oriented cell component** of the game board, and synchronizing the internal state of the game with the Redux Store. Since the p5js graphics component is a standalone React component with its own graphics workflow cycle.
-- It was a real pleasure to have found the **styled-components** for React, the idea behind styling as a component itself with locally scoped css is more coherent with React and the component oriented paradigm. Therefore I found this component to be 100% relevant to the idea of building self contained React components, for the CSS purists it also allows to inject global styles. I particularly enjoyed the power of mixing javascript code inside the CSS definition (all we ever wanted... logic inside CSS! that is very clever). Finally, I did not have to learn yet another CSS coding scheme just good old CSS plus the component leverages the power of JavaScript.
+>- It was a real pleasure to have found the **styled-components** for React, the idea behind styling as a component itself with locally scoped css is more coherent with React and the component oriented paradigm. Therefore I found this component to be 100% relevant to the idea of building self contained React components, for the CSS purists it also allows to inject global styles. I particularly enjoyed the power of mixing javascript code inside the CSS definition (all we ever wanted... logic inside CSS! that is very clever). Finally, I did not have to learn yet another CSS coding scheme just good old CSS plus the component leverages the power of JavaScript.
 
 ##### Sample code extract, using styled components:
 
