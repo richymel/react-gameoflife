@@ -41,16 +41,10 @@ John Conway's Cellular Automaton aka. Game of Life
 ### NB. **About specific versions and performance issues:**
 >The modification to this project's package json has to do with:
 >- React-P5-wrapper specific peer package version dependencies
->- P5@0.5.14 incorporated changes that affect the performance considerably. So the SEM versioning is frozen @0.5.12 specifically in package.json preventing any patch releases (**^**0.5.12 in previous package.json was effectively allowing installation of any later *patch release* and thus causing the performance issue).
+>- P5@0.5.14 incorporated changes that affect the performance considerably. So the SEM versioning is frozen @0.5.12 specifically in package.json preventing any patch releases (^0.5.12 in previous package.json was effectively allowing installation of any later *patch release* and thus causing the performance issue).
 >- In oder to ensure that developers get the exact (node_modules) tree that was generated for this project such that when developers subsequently run **`npm i`** | **`npm install`** are able to generate identical trees *(regardless of intermediate dependency updates)*: Using npm **5.3.0** (most current) as of this writing generated a comprehensive **package.lock.json** file. (cf.[package.lock.json | npm Documentation](https://docs.npmjs.com/files/package-lock.json)).
 >- Packages that were frozen to a specific version in package.json are:
-    - P5, 
-    - react, 
-    - react-dom, 
-    - react-p5-wrapper, 
-    - react-redux, 
-    - redux,
-    - redux-logger 
+    `P5`, `react`, `react-dom`, `react-p5-wrapper`, `react-redux`, `redux`, and `redux-logger` 
     
 ### Final notes:
 >- It was challenging building the **object-oriented cell component** of the game board, and synchronizing the internal state of the game with the Redux Store. Since the p5js graphics component is a standalone React component with its own graphics workflow cycle.
