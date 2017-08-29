@@ -1,4 +1,3 @@
-
 ## react-gameoflife
 John Conway's Cellular Automaton aka. Game of Life
 #### FreeCodeCamp <img src="https://cdnjs.cloudflare.com/ajax/libs/simple-icons/3.0.1/freecodecamp.svg" width="20" height="20"> 305 Challenge 
@@ -39,6 +38,20 @@ John Conway's Cellular Automaton aka. Game of Life
 - [Online ttf to woof converter](https://everythingfonts.com/ttf-to-woff)
 - Background pattern: [Pattern Cooler by Harvey Rayner](https://patterncooler.com/)
 ***
+### NB. **About specific versions and performance issues:**
+>The modification to this project's package json has to do with:
+>- React-P5-wrapper specific peer package version dependencies
+>- P5@0.5.14 incorporated changes that affect the performance considerably. So the SEM versioning is frozen @0.5.12 specifically in package.json preventing any patch releases (**^**0.5.12 in previous package.json was effectively allowing installation of any later *patch release* and thus causing the performance issue).
+>- In oder to ensure that developers get the exact (node_modules) tree that was generated for this project such that when developers subsequently run **`npm i`** | **`npm install`** are able to generate identical trees *(regardless of intermediate dependency updates)*: Using npm **5.3.0** (most current) as of this writing generated a comprehensive **package.lock.json** file. (cf.[package.lock.json | npm Documentation](https://docs.npmjs.com/files/package-lock.json)).
+>- Packages that were frozen to a specific version in package.json are:
+    - P5, 
+    - react, 
+    - react-dom, 
+    - react-p5-wrapper, 
+    - react-redux, 
+    - redux,
+    - redux-logger 
+    
 ### Final notes:
 >- It was challenging building the **object-oriented cell component** of the game board, and synchronizing the internal state of the game with the Redux Store. Since the p5js graphics component is a standalone React component with its own graphics workflow cycle.
 >- It was a real pleasure to have found the **styled-components** for React, the idea behind styling as a component itself with locally scoped css is more coherent with React and the component oriented paradigm. Therefore I found this component to be 100% relevant to the idea of building self contained React components, for the CSS purists it also allows to inject global styles. I particularly enjoyed the power of mixing javascript code inside the CSS definition (all we ever wanted... logic inside CSS! that is very clever). Finally, I did not have to learn yet another CSS coding scheme just good old CSS plus the component leverages the power of JavaScript.
